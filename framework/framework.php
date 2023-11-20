@@ -20,9 +20,9 @@ class g1_session
             $result_count = mysqli_num_rows($result);
             if ($result_count > 0) {
                 // valid session
-                return true;
+                return [true, mysqli_fetch_row($result)];
             }
-            return false;
+            return [false, []];
         }
     }
     static function purge()

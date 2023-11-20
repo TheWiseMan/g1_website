@@ -8,7 +8,14 @@ const SESSION_STATUS_INVALID = 0;
 $current_session_status = SESSION_STATUS_INVALID;
 session_set_cookie_params(315_360_000, '/', '.group1.fr');
 session_start();
-if (g1_session::validate($g1_db)) {
+$temp = g1_session::validate($g1_db);
+if ($temp[0] === TRUE) {
+    $temp_session = $temp[1];
+    $session_id = session_id();
+    $user_id = $temp["user_id"];
+    $service = $temp["service"];
+    $session_end = $temp_session["start_timestamp"];
+    $session_end = $temp_session["timeout_timestamp"];
     $current_session_status = SESSION_STATUS_VALID;
 }
 ini_set('display_errors', 1);
@@ -33,8 +40,9 @@ if (isset($_POST["username"]) and isset($_POST["password"])) {
     $session_end = time() + $session_timeout;
     $user_id = $row[0];
     $user_name = $row[1];
+    $service = $_GET["service"]?:"";
 
-    $sql_request_create_session = "INSERT INTO `sessions` (`session_id`, `user_id`, `session_token`, `start_timestamp`, `timeout_timestamp`) VALUES (NULL, '$user_id', '$session_id', '$session_start', '$session_end')";
+    $sql_request_create_session = "INSERT INTO `sessions` (`session_id`, `user_id`, `session_token`, `start_timestamp`, `timeout_timestamp`, `service`) VALUES (NULL, '$user_id', '$session_id', '$session_start', '$session_end', '$service')";
 
     if ($g1_db->query($sql_request_create_session) === TRUE) {
         $_SESSION["user_id"] = $user_id;
@@ -54,7 +62,8 @@ if ($current_session_status == SESSION_STATUS_VALID) {
             "user_id" => $user_id,
             "user_name" => $user_name,
             "session_start" => $session_start,
-            "session_end" => $session_end
+            "session_end" => $session_end,
+            "service"=>$service
         ]);
         exit;
     } else {
