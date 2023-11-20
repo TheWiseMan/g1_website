@@ -1,6 +1,6 @@
 <?php
-echo __DIR__;
-include (realpath(__DIR__."./database/g1_database.php"));
+
+include __DIR__."/database/g1_database.php";
 class g1_utils
 {
     static function g1_hash($text)
