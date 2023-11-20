@@ -4,6 +4,9 @@ session_start();
 if (isset($_SESSION["user_session_id"])) {
     //check session
 }
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 const DEFAULT_SESSION_TIMEOUT = 3600;
 const PROLONGATED_SESSION_TIMEOUT = 10000;
 if (isset($_POST["username"]) and isset( $_POST["password"])) {
