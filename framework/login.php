@@ -1,6 +1,6 @@
 <?php
 include 'database/g1_database.php';
-include 'framework';
+include 'framework.php';
 session_start();
 if (isset($_SESSION["user_session_id"])) {
     //check session
@@ -58,7 +58,7 @@ if (isset($_POST["username"]) and isset( $_POST["password"])) {
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-    <link rel="stylesheet" href="./styles/login.css">
+    <link rel="stylesheet" href="../styles/login.css">
 </head>
 
 <body>
