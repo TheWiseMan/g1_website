@@ -1,16 +1,19 @@
 <?php
 include 'database/g1_database.php';
 include 'framework.php';
-session_set_cookie_params(0, '/', '.group1.fr');
+const DEFAULT_SESSION_TIMEOUT = 3600;
+const PROLONGATED_SESSION_TIMEOUT = 10000;
+const SESSION_STATUS_VALID = 1;
+const SESSION_STATUS_INVALID = 0;
+$current_session_status = SESSION_STATUS_INVALID;
+session_set_cookie_params(315_360_000, '/', '.group1.fr');
 session_start();
-if (isset($_SESSION["user_session_id"])) {
-    //check session
+if (g1_session::validate($g1_db)) {
+    $current_session_status = SESSION_STATUS_VALID;
 }
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-const DEFAULT_SESSION_TIMEOUT = 3600;
-const PROLONGATED_SESSION_TIMEOUT = 10000;
 if (isset($_POST["username"]) and isset( $_POST["password"])) {
     $session_username = $_POST["username"];
     $session_password = g1_utils::g1_hash($_POST["password"]);
@@ -20,16 +23,22 @@ if (isset($_POST["username"]) and isset( $_POST["password"])) {
     $row = mysqli_fetch_row($sql_result);
     $result_count = mysqli_num_rows($sql_result);
     if ($result_count < 1) { // no user found
-        echo "invalid credentials";
-        return;
+        $current_session_status = SESSION_STATUS_INVALID;
+        header("Location:./content/index.html?invalid&". $_SERVER['QUERY_STRING']);
+        exit;
     }
-    print_r($row);
     $session_id = session_id();
+    $session_start = time();
+    $session_end = time()+$session_timeout;
     $user_id = $row[0];
     $user_name = $row[1];
-    echo $session_id;
+
+    $sql_request_create_session = "INSERT INTO `sessions` (`session_id`, `user_id`, `session_token`, `start_timestamp`, `timeout_timestamp`) VALUES (NULL, '$user_id', '$session_id', '$session_start', '$session_end')";
+
     $_SESSION["user_id"] = $user_id;
     $_SESSION["user_name"] = $user_name;
+    $_SESSION["session_start"] = $session_start;
+    $_SESSION["session_end"] = $session_end;
     if (isset($_GET["redirect"])) {
         header("Location: ".$_GET["redirect"] ."?");
     }
@@ -38,7 +47,9 @@ if (isset($_POST["username"]) and isset( $_POST["password"])) {
         echo json_encode([
             "session_id"=>$session_id,
             "user_id"=>$user_id,
-            "user_name"=>$user_name
+            "user_name"=>$user_name,
+            "session_start" => $session_start,
+            "session_end" => $session_end
         ]);
         exit;
     }
