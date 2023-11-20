@@ -32,7 +32,7 @@ class g1_session
         session_unset();
         session_destroy();
         session_write_close();
-        setcookie(session_name(), '', 0, '/');
+        session_set_cookie_params(315_360_000, '/', '.group1.fr');
         session_start();
         session_regenerate_id(true);
     }

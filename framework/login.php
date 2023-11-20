@@ -19,6 +19,9 @@ if ($temp[0] === TRUE) {
     $current_session_status = SESSION_STATUS_VALID;
     $user_name = g1_user::get_username($user_id);
 }
+else {
+    g1_session::purge();
+}
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
