@@ -1,6 +1,7 @@
 <?php
 include 'database/g1_database.php';
 include 'framework.php';
+session_set_cookie_params(0, '/', '.group1.fr');
 session_start();
 if (isset($_SESSION["user_session_id"])) {
     //check session
@@ -15,18 +16,29 @@ if (isset($_POST["username"]) and isset( $_POST["password"])) {
     $session_password = g1_utils::g1_hash($_POST["password"]);
     $session_timeout = isset($_POST["keep-connected"])? PROLONGATED_SESSION_TIMEOUT: DEFAULT_SESSION_TIMEOUT;
     $sql = "SELECT user_id,user_name FROM members WHERE user_name = '$session_username' and user_password = '$session_password'";
-    $result = $g1_db->query($sql);
-
-    $row = mysqli_fetch_row($result);
+    $sql_result = $g1_db->query($sql);
+    $row = mysqli_fetch_row($sql_result);
+    $result_count = mysqli_num_rows($result);
+    if ($result_count < 1) { // no user found
+        echo "invalid credentials";
+        return;
+    }
     print_r($row);
+    $session_id = session_id();
+    $user_id = $row[0];
+    $user_name = $row[1];
+    echo $session_id;
+    $_SESSION["user_id"] = $user_id;
+    $_SESSION["user_name"] = $user_name;
     if (isset($_GET["redirect"])) {
         header("Location: ".$_GET["redirect"] ."?");
     }
     else if (isset($_GET["service"])) {
         header("Content-Type: application/json");
         echo json_encode([
-            "session_id"=> 12,
-            "user_id"=>1
+            "session_id"=>$session_id,
+            "user_id"=>$user_id,
+            "user_name"=>$user_name
         ]);
         exit;
     }
