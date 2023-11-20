@@ -13,14 +13,16 @@ if (isset($_POST["username"]) and isset( $_POST["password"])) {
     $session_username = $_POST["username"];
     $session_password = $_POST["password"];
     $session_timeout = isset($_POST["keep-connected"])? PROLONGATED_SESSION_TIMEOUT: DEFAULT_SESSION_TIMEOUT;
-    $sql = "SELECT user_id,user_name FROM members WHERE user_name = '$session_username' and user_password = '$session_password'";
-    $result = $g1_db->query($sql);
+    //$sql = "SELECT user_id,user_name FROM members WHERE user_name = '$session_username' and user_password = '$session_password'";
+    //$result = $g1_db->query($sql);
+    $sql = "SELECT * FROM members";  //edit your table name here
+    $res = $g1_db->query($sql);
 
-    $row = mysqli_fetch_row($result);
-    print_r($row);
-
-    echo "test";
-
+    while ($row = $res->fetch_assoc()) {
+        print_r($row);
+    }
+    //$row = mysqli_fetch_row($result);
+    //print_r($row);
     if (isset($_GET["redirect"])) {
         header("Location: ".$_GET["redirect"] ."?");
     }
