@@ -66,8 +66,11 @@ if ($current_session_status == SESSION_STATUS_VALID) {
         ]);
         exit;
     } else {
-        echo "success.";
+        echo "Logged in as $user_name.";
     }
+}
+else {
+    echo "Please check your password.";
 }
 //header("Content-Type: application/json");
 ?>
