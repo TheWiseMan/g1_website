@@ -1,0 +1,81 @@
+:root {
+    --accent-color: #0898ea;
+    --accent-color-2: #3ab2f6;
+}
+body, html {
+    margin: 0px;
+    padding: 0px;
+}
+body {
+    height: 100vh;
+    font-family: sans-serif;
+    background-color: aliceblue;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 20%;
+    min-width: 300px;
+    align-items: stretch;
+    justify-items: center;
+    /*justify-content: space-between;*/
+    gap: 20px;
+    background-color: white;
+    padding: 50px 50px;
+}
+h1 {
+    text-align: center;
+    font-weight: normal;
+    margin: auto;
+    /*text-decoration: underline var(--accent-color) 4px;*/
+    border-bottom: 2px dashed var(--accent-color);
+    padding: 50px 0px;
+    background-color: white;
+}
+h1 span.service-name {
+    text-decoration: none;
+    font-weight: bold;
+    background-color: var(--accent-color);
+    color: white;
+    padding: 5px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    transition: all 0.5s;
+    cursor: pointer;
+}
+input[type=submit],input[type=username],input[type=password] {
+    height: 40px;
+    padding: 5px;
+    outline: none;
+}
+button, input[type=submit] {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.5s;
+}
+button:hover, input[type=submit]:hover,span.service-name:hover {
+    background-color: var(--accent-color-2);
+}
+input[type=username],input[type=password] {
+    border: 1px solid lightgray;
+    border-bottom: 1px solid var(--accent-color);
+}
+
+input[type=username]:hover,input[type=password]:hover,input[type=username]:focus,input[type=password]:focus {
+    border: 1px solid lightgray;
+    border-bottom: 3px solid var(--accent-color);
+}
+#keep-connected * {
+    user-select: none;
+    cursor: pointer;
+}
+#input-keep-connected {
+    margin-right: 20px;
+    accent-color: var(--accent-color);
+}
