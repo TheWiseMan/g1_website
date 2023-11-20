@@ -13,10 +13,10 @@ if ($temp[0] === TRUE) {
     $temp_session = $temp[1];
     print_r($temp_session);
     $session_id = session_id();
-    $user_id = $temp["user_id"];
-    $service = $temp["service"];
-    $session_end = $temp_session["start_timestamp"];
-    $session_end = $temp_session["timeout_timestamp"];
+    $user_id = $temp[1];
+    $service = $temp[5];
+    $session_end = $temp_session[3];
+    $session_end = $temp_session[4];
     $current_session_status = SESSION_STATUS_VALID;
 }
 ini_set('display_errors', 1);
