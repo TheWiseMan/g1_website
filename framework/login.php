@@ -14,46 +14,50 @@ if (g1_session::validate($g1_db)) {
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-if (isset($_POST["username"]) and isset( $_POST["password"])) {
+if (isset($_POST["username"]) and isset($_POST["password"])) {
     $session_username = $_POST["username"];
     $session_password = g1_utils::g1_hash($_POST["password"]);
-    $session_timeout = isset($_POST["keep-connected"])? PROLONGATED_SESSION_TIMEOUT: DEFAULT_SESSION_TIMEOUT;
+    $session_timeout = isset($_POST["keep-connected"]) ? PROLONGATED_SESSION_TIMEOUT : DEFAULT_SESSION_TIMEOUT;
     $sql = "SELECT user_id,user_name FROM members WHERE user_name = '$session_username' and user_password = '$session_password'";
     $sql_result = $g1_db->query($sql);
     $row = mysqli_fetch_row($sql_result);
     $result_count = mysqli_num_rows($sql_result);
     if ($result_count < 1) { // no user found
+        g1_session::purge();
         $current_session_status = SESSION_STATUS_INVALID;
-        header("Location: ?invalid&". $_SERVER['QUERY_STRING']);
+        header("Location: ?invalid&" . $_SERVER['QUERY_STRING']);
         exit;
     }
     $session_id = session_id();
     $session_start = time();
-    $session_end = time()+$session_timeout;
+    $session_end = time() + $session_timeout;
     $user_id = $row[0];
     $user_name = $row[1];
 
     $sql_request_create_session = "INSERT INTO `sessions` (`session_id`, `user_id`, `session_token`, `start_timestamp`, `timeout_timestamp`) VALUES (NULL, '$user_id', '$session_id', '$session_start', '$session_end')";
 
-    $_SESSION["user_id"] = $user_id;
-    $_SESSION["user_name"] = $user_name;
-    $_SESSION["session_start"] = $session_start;
-    $_SESSION["session_end"] = $session_end;
-    if (isset($_GET["redirect"])) {
-        header("Location: ".$_GET["redirect"] ."?");
+    if ($g1_db->query($sql_request_create_session) === TRUE) {
+        $_SESSION["user_id"] = $user_id;
+        $_SESSION["user_name"] = $user_name;
+        $_SESSION["session_start"] = $session_start;
+        $_SESSION["session_end"] = $session_end;
+        $current_session_status = SESSION_STATUS_VALID;
     }
-    else if (isset($_GET["service"])) {
+}
+if ($current_session_status == SESSION_STATUS_VALID) {
+    if (isset($_GET["redirect"])) {
+        header("Location: " . $_GET["redirect"] . "?session=$session_id&user=$user_id");
+    } else if (isset($_GET["service"])) {
         header("Content-Type: application/json");
         echo json_encode([
-            "session_id"=>$session_id,
-            "user_id"=>$user_id,
-            "user_name"=>$user_name,
+            "session_id" => $session_id,
+            "user_id" => $user_id,
+            "user_name" => $user_name,
             "session_start" => $session_start,
             "session_end" => $session_end
         ]);
         exit;
-    }
-    else {
+    } else {
         echo "success.";
     }
 }
@@ -89,16 +93,17 @@ if (isset($_POST["username"]) and isset( $_POST["password"])) {
 
 
     <?php
-        if (isset($_GET["service"])) {
-            echo "<h1><span class='service-name'>" . $_GET["service"] . "</span><br>needs you to login with Group1</h1>";
-        } else {
-            echo "<h1>Group1 Login</h1>";
-        }
-        ?>
+    if (isset($_GET["service"])) {
+        echo "<h1><span class='service-name'>" . $_GET["service"] . "</span><br>needs you to login with Group1</h1>";
+    } else {
+        echo "<h1>Group1 Login</h1>";
+    }
+    ?>
     <form id="login-form" method="post" action="">
         <input type="username" id="input-username" placeholder="USERNAME" name="username">
         <input type="password" id="input-password" placeholder="PASSWORD" name="password">
-        <div id="keep-connected"><input type="checkbox" id="input-keep-connected" name="keep-connected"><label for="input-keep-connected">Keep me connected</label></div>
+        <div id="keep-connected"><input type="checkbox" id="input-keep-connected" name="keep-connected"><label
+                for="input-keep-connected">Keep me connected</label></div>
         <input type="submit" value="Login">
     </form>
     <!--<script src="js/scripts.js"></script>-->
