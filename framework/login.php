@@ -11,10 +11,10 @@ session_start();
 $temp = g1_session::validate($g1_db);
 if ($temp[0] === TRUE) {
     $temp_session = $temp[1];
-    print_r($temp_session);
+    //print_r($temp_session);
     $session_id = session_id();
     $user_id = $temp[1];
-    $service = $temp[5];
+    $service = $temp[5]?:"";
     $session_end = $temp_session[3];
     $session_end = $temp_session[4];
     $current_session_status = SESSION_STATUS_VALID;
@@ -41,7 +41,7 @@ if (isset($_POST["username"]) and isset($_POST["password"])) {
     $session_end = time() + $session_timeout;
     $user_id = $row[0];
     $user_name = $row[1];
-    $service = $_GET["service"]?:"";
+    $service = $_GET["service"]?:"group1";
 
     $sql_request_create_session = "INSERT INTO `sessions` (`session_id`, `user_id`, `session_token`, `start_timestamp`, `timeout_timestamp`, `service`) VALUES (NULL, '$user_id', '$session_id', '$session_start', '$session_end', '$service')";
 
@@ -61,7 +61,6 @@ if ($current_session_status == SESSION_STATUS_VALID) {
         echo json_encode([
             "session_id" => $session_id,
             "user_id" => $user_id,
-            "user_name" => $user_name,
             "session_start" => $session_start,
             "session_end" => $session_end,
             "service"=>$service
