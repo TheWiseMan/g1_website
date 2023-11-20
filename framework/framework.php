@@ -1,4 +1,5 @@
 <?php
+echo $_SERVER [ 'PHP_SELF' ];
 include (realpath(dirname(__FILE__)."./database/g1_database.php"));
 class g1_utils
 {
