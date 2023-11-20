@@ -18,7 +18,7 @@ if (isset($_POST["username"]) and isset( $_POST["password"])) {
     $sql = "SELECT user_id,user_name FROM members WHERE user_name = '$session_username' and user_password = '$session_password'";
     $sql_result = $g1_db->query($sql);
     $row = mysqli_fetch_row($sql_result);
-    $result_count = mysqli_num_rows($result);
+    $result_count = mysqli_num_rows($sql_result);
     if ($result_count < 1) { // no user found
         echo "invalid credentials";
         return;
