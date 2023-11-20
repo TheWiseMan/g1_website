@@ -1,5 +1,5 @@
 <?php
-include "./database/g1_database.php";
+include (realpath(dirname(__FILE__)."./database/g1_database.php"));
 class g1_utils
 {
     static function g1_hash($text)
