@@ -11,6 +11,7 @@ session_start();
 $temp = g1_session::validate($g1_db);
 if ($temp[0] === TRUE) {
     $temp_session = $temp[1];
+    echo $temp_session;
     $session_id = session_id();
     $user_id = $temp["user_id"];
     $service = $temp["service"];
