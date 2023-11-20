@@ -1,5 +1,4 @@
 <?php
-include "database/g1_database.php";
 class g1_utils
 {
     static function g1_hash($text)
