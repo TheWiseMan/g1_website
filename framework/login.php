@@ -17,6 +17,7 @@ if ($temp[0] === TRUE) {
     $session_start = $temp_session[3];
     $session_end = $temp_session[4];
     $current_session_status = SESSION_STATUS_VALID;
+    $user_name = g1_user::get_username($user_id);
 }
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
