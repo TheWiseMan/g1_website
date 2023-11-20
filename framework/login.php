@@ -35,6 +35,7 @@ if (isset($_POST["username"]) and isset($_POST["password"])) {
         header("Location: ?invalid&" . $_SERVER['QUERY_STRING']);
         exit;
     }
+    g1_session::purge();
     $session_id = session_id();
     $session_start = time();
     $session_end = time() + $session_timeout;
