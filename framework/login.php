@@ -1,7 +1,7 @@
 <?php
 include 'framework.php';
 const DEFAULT_SESSION_TIMEOUT = 3600;
-const PROLONGATED_SESSION_TIMEOUT = 10000;
+const PROLONGATED_SESSION_TIMEOUT = 315_360_000;
 const SESSION_STATUS_VALID = 1;
 const SESSION_STATUS_INVALID = 0;
 $current_session_status = SESSION_STATUS_INVALID;
@@ -71,11 +71,11 @@ if ($current_session_status == SESSION_STATUS_VALID) {
         ]);
         exit;
     } else {
-        echo "Logged in as $user_name.";
+        echo "<div class='status success'>Logged in as $user_name.</div>";
     }
 }
 else {
-    echo "Please check your password.";
+    echo "<div class='status error'>Please check your password.</div>";
 }
 //header("Content-Type: application/json");
 ?>
