@@ -24,7 +24,7 @@ if (isset($_POST["username"]) and isset( $_POST["password"])) {
     $result_count = mysqli_num_rows($sql_result);
     if ($result_count < 1) { // no user found
         $current_session_status = SESSION_STATUS_INVALID;
-        header("Location:./content/index.html?invalid&". $_SERVER['QUERY_STRING']);
+        header("Location: ?invalid&". $_SERVER['QUERY_STRING']);
         exit;
     }
     $session_id = session_id();
