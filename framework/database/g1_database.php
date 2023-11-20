@@ -16,4 +16,5 @@
 		return $conn;
 	}
 	$g1_db = mysqli_connect($servername,$username,$password,$dbname);
+	define("G1_DATABASE", $g1_db);
 ?>

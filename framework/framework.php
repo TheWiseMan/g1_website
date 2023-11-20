@@ -37,4 +37,11 @@ class g1_session
         session_regenerate_id(true);
     }
 }
+
+class g1_user {
+    static function get_username($id) {
+        $res = G1_DATABASE->query("SELECT user_name from members where user_id = $id");
+        return mysqli_fetch_row($res)[0];
+    }
+}
 ?>
