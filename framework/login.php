@@ -13,13 +13,12 @@ if ($temp[0] === TRUE) {
     //print_r($temp_session);
     $session_id = session_id();
     $user_id = $temp_session[1];
-    $service = $temp_session[5]?:"";
+    $service = $temp_session[5] ?: "";
     $session_start = $temp_session[3];
     $session_end = $temp_session[4];
     $current_session_status = SESSION_STATUS_VALID;
     $user_name = g1_user::get_username($user_id);
-}
-else {
+} else {
     g1_session::purge();
 }
 ini_set('display_errors', 1);
@@ -45,7 +44,7 @@ if (isset($_POST["username"]) and isset($_POST["password"])) {
     $session_end = time() + $session_timeout;
     $user_id = $row[0];
     $user_name = $row[1];
-    $service = isset($_GET["service"])?$_GET["service"]:"group1";
+    $service = isset($_GET["service"]) ? $_GET["service"] : "group1";
 
     $sql_request_create_session = "INSERT INTO `sessions` (`session_id`, `user_id`, `session_token`, `start_timestamp`, `timeout_timestamp`, `service`) VALUES (NULL, '$user_id', '$session_id', '$session_start', '$session_end', '$service')";
 
@@ -60,6 +59,7 @@ if (isset($_POST["username"]) and isset($_POST["password"])) {
 if ($current_session_status == SESSION_STATUS_VALID) {
     if (isset($_GET["redirect"])) {
         header("Location: " . $_GET["redirect"] . "?session=$session_id&user=$user_id");
+        exit;
     } else if (isset($_GET["service"])) {
         header("Content-Type: application/json");
         echo json_encode([
@@ -67,15 +67,10 @@ if ($current_session_status == SESSION_STATUS_VALID) {
             "user_id" => $user_id,
             "session_start" => $session_start,
             "session_end" => $session_end,
-            "service"=>$service
+            "service" => $service
         ]);
         exit;
-    } else {
-        echo "<div class='status success'>Logged in as $user_name.</div>";
     }
-}
-else {
-    echo "<div class='status error'>Please check your password.</div>";
 }
 //header("Content-Type: application/json");
 ?>
@@ -114,6 +109,12 @@ else {
     } else {
         echo "<h1>Group1 Login</h1>";
     }
+    if ($current_session_status == SESSION_STATUS_VALID) {
+        echo "<div class='status success'>Logged in as $user_name.</div>";
+    } else {
+        echo "<div class='status error'>Please check your password.</div>";
+    }
+
     ?>
     <form id="login-form" method="post" action="">
         <input type="username" id="input-username" placeholder="USERNAME" name="username">
