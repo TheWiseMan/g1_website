@@ -13,8 +13,8 @@ if ($temp[0] === TRUE) {
     $temp_session = $temp[1];
     //print_r($temp_session);
     $session_id = session_id();
-    $user_id = $temp[1];
-    $service = $temp[5]?:"";
+    $user_id = $temp_session[1];
+    $service = $temp_session[5]?:"";
     $session_end = $temp_session[3];
     $session_end = $temp_session[4];
     $current_session_status = SESSION_STATUS_VALID;
