@@ -16,6 +16,8 @@ if (isset($_POST["username"]) and isset( $_POST["password"])) {
     $row = mysqli_fetch_row($result);
     print_r($row);
 
+    echo "test";
+
     if (isset($_GET["redirect"])) {
         header("Location: ".$_GET["redirect"] ."?");
     }
