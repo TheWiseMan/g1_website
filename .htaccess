@@ -1,2 +1,1 @@
-RewriteEngine on
-RewriteRule ^login$ framework/login.php 
+FallbackResource /index.php
