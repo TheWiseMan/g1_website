@@ -1,5 +1,4 @@
 <?php
-include 'database/g1_database.php';
 include 'framework.php';
 const DEFAULT_SESSION_TIMEOUT = 3600;
 const PROLONGATED_SESSION_TIMEOUT = 10000;

@@ -1,4 +1,5 @@
 <?php
+include "./database/g1_database.php";
 class g1_utils
 {
     static function g1_hash($text)
@@ -22,8 +23,8 @@ class g1_session
                 // valid session
                 return [true, mysqli_fetch_row($result)];
             }
-            return [false, []];
         }
+        return [false, []];
     }
     static function purge()
     {
