@@ -41,7 +41,7 @@ if (isset($_POST["username"]) and isset($_POST["password"])) {
     $session_end = time() + $session_timeout;
     $user_id = $row[0];
     $user_name = $row[1];
-    $service = $_GET["service"]?:"group1";
+    $service = isset($_GET["service"])?$_GET["service"]:"group1";
 
     $sql_request_create_session = "INSERT INTO `sessions` (`session_id`, `user_id`, `session_token`, `start_timestamp`, `timeout_timestamp`, `service`) VALUES (NULL, '$user_id', '$session_id', '$session_start', '$session_end', '$service')";
 
