@@ -123,6 +123,7 @@ if ($current_session_status == SESSION_STATUS_VALID) {
                 for="input-keep-connected">Keep me connected</label></div>
         <input type="submit" value="Login">
     </form>
+    <a href="/register.php">New account</a>
     <!--<script src="js/scripts.js"></script>-->
 </body>
 
